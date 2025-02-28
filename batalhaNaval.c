@@ -5,8 +5,8 @@
 // Siga os comentários para implementar cada parte do desafio.
 
 // const para garantir que o array tenha um tamanho fixo
-const int TAMANHO_TABULEIRO = 10;  // Tamanho do tabuleiro
-const int TAMANHO_NAVIO = 3;       // Tamanho dos navios
+#define int TAMANHO_TABULEIRO 10  // Tamanho do tabuleiro
+#define int TAMANHO_NAVIO 3       // Tamanho dos navios
 
 // Função para exibir o tabuleiro
 void exibirTabuleiro(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]) {
@@ -18,34 +18,83 @@ void exibirTabuleiro(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]) {
     }
 }
 
-// Função para posicionar o navio horizontalmente
+
+// Função para verificar se um navio horizontal cabe no tabuleiro
 int posicionarNavioHorizontal(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int linha, int coluna) {
     if (coluna + TAMANHO_NAVIO > TAMANHO_TABULEIRO) {
         return 0; // Não cabe
     }
+
+    // Verifica se há sobreposição
     for (int i = coluna; i < coluna + TAMANHO_NAVIO; i++) {
         if (tabuleiro[linha][i] != 0) {
             return 0; // Há sobreposição
         }
     }
+
+    // Posiciona o navio
     for (int i = coluna; i < coluna + TAMANHO_NAVIO; i++) {
-        tabuleiro[linha][i] = 3; // Marca a posição do navio
+        tabuleiro[linha][i] = 3;
     }
     return 1;
 }
 
-// Função para posicionar o navio verticalmente
+// Função para verificar se um navio vertical cabe no tabuleiro
 int posicionarNavioVertical(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int linha, int coluna) {
     if (linha + TAMANHO_NAVIO > TAMANHO_TABULEIRO) {
         return 0; // Não cabe
     }
+
+    // Verifica se há sobreposição
     for (int i = linha; i < linha + TAMANHO_NAVIO; i++) {
         if (tabuleiro[i][coluna] != 0) {
             return 0; // Há sobreposição
         }
     }
+
+    // Posiciona o navio
     for (int i = linha; i < linha + TAMANHO_NAVIO; i++) {
-        tabuleiro[i][coluna] = 3; // Marca a posição do navio
+        tabuleiro[i][coluna] = 3;
+    }
+    return 1;
+}
+
+// Função para posicionar um navio diagonalmente (linha e coluna aumentam ou diminuem simultaneamente)
+int posicionarNavioDiagonal(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int linha, int coluna, int crescente) {
+    if (crescente) {
+        // Verifica se o navio cabe na diagonal crescente
+        if (linha + TAMANHO_NAVIO > TAMANHO_TABULEIRO || coluna + TAMANHO_NAVIO > TAMANHO_TABULEIRO) {
+            return 0; // Não cabe
+        }
+
+        // Verifica se há sobreposição
+        for (int i = 0; i < TAMANHO_NAVIO; i++) {
+            if (tabuleiro[linha + i][coluna + i] != 0) {
+                return 0; // Há sobreposição
+            }
+        }
+
+        // Posiciona o navio na diagonal crescente
+        for (int i = 0; i < TAMANHO_NAVIO; i++) {
+            tabuleiro[linha + i][coluna + i] = 3;
+        }
+    } else {
+        // Verifica se o navio cabe na diagonal decrescente
+        if (linha - TAMANHO_NAVIO < -1 || coluna + TAMANHO_NAVIO > TAMANHO_TABULEIRO) {
+            return 0; // Não cabe
+        }
+
+        // Verifica se há sobreposição
+        for (int i = 0; i < TAMANHO_NAVIO; i++) {
+            if (tabuleiro[linha - i][coluna + i] != 0) {
+                return 0; // Há sobreposição
+            }
+        }
+
+        // Posiciona o navio na diagonal decrescente
+        for (int i = 0; i < TAMANHO_NAVIO; i++) {
+            tabuleiro[linha - i][coluna + i] = 3;
+        }
     }
     return 1;
 }
@@ -60,22 +109,33 @@ int main() {
 
     int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO] = {0};
 
-    // Posiciona o navio horizontal
-    int linhaHorizontal = 2, colunaHorizontal = 1;
-    if (posicionarNavioHorizontal(tabuleiro, linhaHorizontal, colunaHorizontal)) {
-        printf("Navio horizontal posicionado com sucesso!\n");
-    } else {
-        printf("Erro ao posicionar o navio horizontal.\n");
-    }
+    // Posiciona o navio horizontais e verticais
+   // Posiciona os navios horizontais e verticais
+   if (posicionarNavioHorizontal(tabuleiro, 2, 1)) {
+    printf("Navio horizontal posicionado com sucesso!\n");
+} else {
+    printf("Erro ao posicionar o navio horizontal.\n");
+}
 
-    // Posiciona o navio vertical
-    int linhaVertical = 5, colunaVertical = 3;
-    if (posicionarNavioVertical(tabuleiro, linhaVertical, colunaVertical)) {
-        printf("Navio vertical posicionado com sucesso!\n");
-    } else {
-        printf("Erro ao posicionar o navio vertical.\n");
-    }
+if (posicionarNavioVertical(tabuleiro, 5, 3)) {
+    printf("Navio vertical posicionado com sucesso!\n");
+} else {
+    printf("Erro ao posicionar o navio vertical.\n");
+}
 
+// Posiciona os navios diagonais
+if (posicionarNavioDiagonal(tabuleiro, 0, 0, 1)) {
+    printf("Navio diagonal (crescente) posicionado com sucesso!\n");
+} else {
+    printf("Erro ao posicionar o navio diagonal (crescente).\n");
+}
+
+if (posicionarNavioDiagonal(tabuleiro, 9, 0, 0)) {
+    printf("Navio diagonal (decrescente) posicionado com sucesso!\n");
+} else {
+    printf("Erro ao posicionar o navio diagonal (decrescente).\n");
+}
+    
     // Exibe o tabuleiro
     printf("\nTabuleiro:\n");
     exibirTabuleiro(tabuleiro);
@@ -83,33 +143,9 @@ int main() {
     return 0;
 }
 
-int main() {
-   
 
-    // Inicializa o tabuleiro com água (0)
-    int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO] = {0};
 
-    // Posiciona o navio horizontal
-    int linhaHorizontal = 2, colunaHorizontal = 1;
-    if (posicionarNavioHorizontal(tabuleiro, linhaHorizontal, colunaHorizontal)) {
-        printf("Navio horizontal posicionado com sucesso!\n");
-    } else {
-        printf("Erro ao posicionar o navio horizontal.\n");
-    }
 
-    // Posiciona o navio vertical
-    int linhaVertical = 5, colunaVertical = 3;
-    if (posicionarNavioVertical(tabuleiro, linhaVertical, colunaVertical)) {
-        printf("Navio vertical posicionado com sucesso!\n");
-    } else {
-        printf("Erro ao posicionar o navio vertical.\n");
-    }
-
-    // Exibe o tabuleiro
-    printf("\nTabuleiro:\n");
-    exibirTabuleiro(tabuleiro);
-
-    return 0;
 
     // Nível Mestre - Habilidades Especiais com Matrizes
     // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
@@ -131,18 +167,3 @@ int main() {
     // 0 0 1 0 0
     // 1 1 1 1 1
     // 0 0 1 0 0
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-   
