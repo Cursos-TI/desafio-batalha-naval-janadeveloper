@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 
 // Definições globais
 #define TAMANHO_TABULEIRO 10  // Tamanho do tabuleiro 10x10
@@ -53,11 +55,80 @@ int posicionarNavio(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int nav
     return 1; // Navio posicionado com sucesso
 }
 
+//////////////////////////////////////////////////////////
+// Aplica a habilidade Cruz
+void aplicarHabilidadeCruz(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int x, int y) {
+    // Padrão da Cruz (5s no centro e nas linhas)
+    int padrao[3][5] = {
+        {0, 0, 5, 0, 0},  // Linha acima do centro
+        {5, 5, 5, 5, 5},  // Linha do meio
+        {0, 0, 5, 0, 0}   // Linha abaixo do centro
+    };
+
+    // Aplica o padrão da cruz no tabuleiro
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 5; j++) {
+            int novoX = x + i - 1;  // Ajuste para centralizar a cruz no ponto (x, y)
+            int novoY = y + j - 2;  // Ajuste para centralizar a cruz no ponto (x, y)
+
+            // Verifica se a nova posição está dentro dos limites do tabuleiro
+            if (novoX >= 0 && novoX < TAMANHO_TABULEIRO && novoY >= 0 && novoY < TAMANHO_TABULEIRO) {
+                tabuleiro[novoX][novoY] = padrao[i][j];  // Aplica o valor do padrão
+            }
+        }
+    }
+}
+
+// Aplica a habilidade Octaedro
+void aplicarHabilidadeOctaedro(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int x, int y) {
+    int padrao[3][5] = {
+        {0, 0, 5, 0, 0},
+        {0, 5, 5, 5, 0},
+        {0, 0, 5, 0, 0}
+    };
+
+    // Aplica o padrão do Octaedro no tabuleiro
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 5; j++) {
+            int novoX = x + i - 1;  // Ajuste para centralizar o padrão no ponto (x, y)
+            int novoY = y + j - 2;  // Ajuste para centralizar o padrão no ponto (x, y)
+
+            // Verifica se a nova posição está dentro dos limites do tabuleiro
+            if (novoX >= 0 && novoX < TAMANHO_TABULEIRO && novoY >= 0 && novoY < TAMANHO_TABULEIRO) {
+                tabuleiro[novoX][novoY] = padrao[i][j];  // Aplica o valor do padrão
+            }
+        }
+    }
+}
+
+void aplicarHabilidadeCone(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO], int x, int y) {
+    int padrao[3][5] = {
+        {0, 0, 5, 0, 0},  // Linha acima do centro
+        {0, 5, 5, 5, 0},  // Linha do meio
+        {5, 5, 5, 5, 5}   // Linha abaixo do centro
+    };
+
+    // Aplica o padrão do Cone no tabuleiro
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 5; j++) {
+            int novoX = x + i - 1;  // Ajuste para centralizar o padrão no ponto (x, y)
+            int novoY = y + j - 2;  // Ajuste para centralizar o padrão no ponto (x, y)
+
+            // Verifica se a nova posição está dentro dos limites do tabuleiro
+            if (novoX >= 0 && novoX < TAMANHO_TABULEIRO && novoY >= 0 && novoY < TAMANHO_TABULEIRO) {
+                tabuleiro[novoX][novoY] = padrao[i][j];  // Aplica o valor do padrão
+            }
+        }
+    }
+}
+
+
+////////////////////////////////////////////////////////////
 int main() {
     int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO] = {0}; // Inicializa o tabuleiro com 0s
 
     // Define as coordenadas dos quatro navios conforme as posições fornecidas
-    int navio_horizontal[] = {2, 1, 2, 2, 2, 3}; // ID 1
+    int navio_horizontal[] = {8, 1, 8, 2, 8, 3}; // ID 1
     int navio_vertical[] = {5, 3, 6, 3, 7, 3};   // ID 2
     int navio_diagonal_crescente[] = {0, 9, 1, 8, 2, 7}; // ID 3
     int navio_diagonal_decrescente[] = {7, 0, 6, 1, 5, 2}; // ID 4
@@ -86,6 +157,11 @@ int main() {
     } else {
         printf("Erro ao posicionar o navio diagonal decrescente.\n");
     }
+
+    // Aplica as habilidades nas posições corretas
+    aplicarHabilidadeCruz(tabuleiro, 8, 7);
+    aplicarHabilidadeOctaedro(tabuleiro, 1, 2);
+    aplicarHabilidadeCone(tabuleiro, 4, 7);
 
     // Exibe o tabuleiro atualizado
     printf("\nTabuleiro:\n");
